@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Do You Love Cats?</title>
+<style>
+  :root{
+    --pink-bg: #ffe3ec;
+    --pink-deep: #ff8fab;
+    --pink-line: #ffb3c6;
+    --green: #8fd694;
+    --green-dark: #5fb56a;
+    --red: #ff7a93;
+    --red-dark: #e85c78;
+    --text: #6b3a4a;
+    --card: #fff5f8;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html,body{
+    margin:0;
+    padding:0;
+    height:100%;
+    font-family: 'Comic Sans MS', 'Segoe UI', system-ui, sans-serif;
+    background: radial-gradient(circle at 20% 20%, #fff0f5, var(--pink-bg) 60%);
+    color: var(--text);
+    overflow: hidden;
+  }
+
+  #stage{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .paw{
+    position:absolute;
+    opacity:.25;
+    font-size: 28px;
+    pointer-events:none;
+    animation: floaty 6s ease-in-out infinite;
+  }
+  @keyframes floaty{
+    0%,100%{ transform: translateY(0) rotate(0deg); }
+    50%{ transform: translateY(-14px) rotate(8deg); }
+  }
+
+  .scene{
+    position: relative;
+    width: min(420px, 90vw);
+    background: var(--card);
+    border-radius: 32px;
+    padding: 40px 28px 34px;
+    text-align:center;
+    box-shadow: 0 20px 50px rgba(255, 143, 171, 0.35);
+    border: 3px solid var(--pink-line);
+  }
+
+  .cat{
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    margin: 6px 0 18px;
+    display:inline-block;
+    transition: transform .25s ease;
+  }
+
+  .bounce{ animation: bounce 1.8s ease-in-out infinite; }
+  @keyframes bounce{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-10px); }
+  }
+
+  .shake{ animation: shake .4s ease-in-out; }
+  @keyframes shake{
+    0%,100%{ transform: translateX(0); }
+    25%{ transform: translateX(-6px) rotate(-3deg); }
+    75%{ transform: translateX(6px) rotate(3deg); }
+  }
+
+  h1{
+    font-size: 1.5rem;
+    margin: 0 0 26px;
+    line-height: 1.35;
+  }
+
+  .sub{
+    margin-top: 14px;
+    font-size: .85rem;
+    color: var(--pink-deep);
+  }
+
+  .buttons{
+    position: relative;
+    display:flex;
+    justify-content:center;
+    gap: 22px;
+    height: 58px;
+  }
+
+  .btn{
+    position: absolute;
+    top:0;
+    padding: 14px 34px;
+    border:none;
+    border-radius: 999px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: white;
+    transition: left .18s ease, top .18s ease, transform .1s ease;
+    box-shadow: 0 8px 0 rgba(0,0,0,0.08);
+    white-space: nowrap;
+  }
+
+  .btn:active{ transform: translateY(3px); box-shadow: 0 4px 0 rgba(0,0,0,0.08); }
+
+  .btn-yes{ background: linear-gradient(180deg, var(--green), var(--green-dark)); }
+  .btn-no{ background: linear-gradient(180deg, var(--red), var(--red-dark)); }
+
+  .hidden{ display:none; }
+
+  #final .cat{ width: 200px; height: 200px; }
+
+  #final h1{ margin-bottom: 8px; }
+
+  .final-sub{
+    color: var(--pink-deep);
+    font-size: 1rem;
+    margin-top: 4px;
+  }
+
+  .hearts{
+    font-size: 1.1rem;
+  }
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <!-- decorative paws -->
+  <span class="paw" style="top:8%; left:6%;">🐾</span>
+  <span class="paw" style="top:75%; left:10%; animation-delay:1s;">🐾</span>
+  <span class="paw" style="top:15%; right:8%; animation-delay:2s;">🐾</span>
+  <span class="paw" style="top:80%; right:12%; animation-delay:1.5s;">🐾</span>
+
+  <!-- SCENE 1 -->
+  <div class="scene" id="scene1">
+    <img class="cat bounce" id="cat1" src="catt1.png" alt="cat">
+    <h1>بابا نقولك حاجة</h1>
+    <div class="buttons" id="buttons1">
+      <button class="btn btn-yes" id="yes1" style="left: calc(50% - 100px);">ايه</button>
+      <button class="btn btn-no" id="no1" style="left: calc(50% + 20px);">لالا</button>
+    </div>
+  </div>
+
+  <!-- SCENE 2 -->
+  <div class="scene hidden" id="scene2">
+    <img class="cat bounce" src="catt3.png" alt="cat">
+    <h1>وش كون نجيبو قط اخر يونس جيفري</h1>
+    <div class="buttons" id="buttons2">
+      <button class="btn btn-yes" id="yes2" style="left: calc(50% - 100px);">ايه</button>
+      <button class="btn btn-no" id="no2" style="left: calc(50% + 20px);">لالا</button>
+    </div>
+  </div>
+
+  <!-- SCENE 3 (crying, shown only after a real "No" click on scene 2) -->
+  <div class="scene hidden" id="scene3">
+    <img class="cat" src="catt2.png" alt="cat">
+    <h1>زيد خمم فيها يعني جيفري مسكين وحيد...</h1>
+    <div class="buttons" id="buttons3">
+      <button class="btn btn-yes" id="yes3" style="left: calc(50% - 100px);">ايه</button>
+      <button class="btn btn-no" id="no3" style="left: calc(50% + 20px);">لالا</button>
+    </div>
+    <div class="sub">الخطة ذي تاع جيفري مش انا... 🐾</div>
+  </div>
+
+  <!-- SCENE 4 (buttons swap places, then keep switching) -->
+  <div class="scene hidden" id="scene4">
+    <img class="cat bounce" id="cat4" src="catt5.png" alt="cat">
+    <h1 id="scene4-title">والله غير تعاود تخمم كراك تبدل رايك 🐾</h1>
+    <div class="buttons" id="buttons4">
+      <button class="btn btn-no" id="no4" style="left: calc(50% - 100px);">لالا</button>
+      <button class="btn btn-yes" id="yes4" style="left: calc(50% + 20px);">ايه</button>
+    </div>
+    <div class="sub">مغاضكش جيفري مسكين 🐈</div>
+  </div>
+
+  <!-- FINAL -->
+  <div class="scene hidden" id="final">
+    <img class="cat" src="catt6.png" alt="cat">
+    <h1>ايواااه غدوة تلقى القط الجديد فالدار💕</h1>
+    <div class="final-sub hearts">🐱🐾</div>
+  </div>
+</div>
+
+<script>
+  // Positions for the two-button row, relative to the scene width
+  const LEFT_POS  = "calc(50% - 100px)";
+  const RIGHT_POS = "calc(50% + 20px)";
+
+  function showScene(id){
+    document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+  }
+
+  // Generic "runaway No button" behavior for a given scene's button row
+  function setupRunawayNo(container, noBtn, yesBtn){
+    let dodging = false;
+
+    function randomDodge(){
+      // move the "no" button to a random spot within the row bounds
+      const rect = container.getBoundingClientRect();
+      const btnWidth = noBtn.offsetWidth;
+      const maxLeft = Math.max(20, rect.width - btnWidth - 20);
+      const randomLeft = Math.random() * maxLeft;
+      const randomTop = (Math.random() - 0.5) * 30;
+      noBtn.style.left = randomLeft + "px";
+      noBtn.style.top = randomTop + "px";
+    }
+
+    noBtn.addEventListener('mouseenter', () => {
+      randomDodge();
+    });
+
+    noBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      randomDodge();
+    });
+
+    // touch support for mobile
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      randomDodge();
+    }, { passive:false });
+  }
+
+  // Generic "swap Yes/No positions" behavior
+  function setupSwapButtons(noBtn, yesBtn, startNoLeft){
+    let noOnLeft = startNoLeft;
+
+    function swap(){
+      noOnLeft = !noOnLeft;
+      if(noOnLeft){
+        noBtn.style.left = LEFT_POS;
+        yesBtn.style.left = RIGHT_POS;
+      } else {
+        noBtn.style.left = RIGHT_POS;
+        yesBtn.style.left = LEFT_POS;
+      }
+    }
+
+    noBtn.addEventListener('mouseenter', swap);
+    noBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      swap();
+    });
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      swap();
+    }, { passive:false });
+  }
+
+  // ---- Scene 1: "Do you love cats?" — No dodges randomly, never navigates ----
+  const buttons1 = document.getElementById('buttons1');
+  const no1 = document.getElementById('no1');
+  const yes1 = document.getElementById('yes1');
+  const cat1 = document.getElementById('cat1');
+  let cat1RevertTimer = null;
+
+  function dodgeReaction(){
+    // briefly swap to the "startled" cat pose, then revert
+    cat1.src = 'catt2.png';
+    clearTimeout(cat1RevertTimer);
+    cat1RevertTimer = setTimeout(() => { cat1.src = 'catt1.png'; }, 600);
+  }
+
+  setupRunawayNo(buttons1, no1, yes1);
+  no1.addEventListener('mouseenter', dodgeReaction);
+  no1.addEventListener('click', dodgeReaction);
+  no1.addEventListener('touchstart', dodgeReaction, { passive:true });
+  yes1.addEventListener('click', () => showScene('scene2'));
+
+  // ---- Scene 2: "Would you like to raise one together?" ----
+  // Yes moves straight to the happy ending.
+  // No is a REAL click here — it's the one that leads to the crying cat (fix: was wrongly on Yes before).
+  const no2 = document.getElementById('no2');
+  const yes2 = document.getElementById('yes2');
+  no2.addEventListener('click', () => showScene('scene3'));
+  yes2.addEventListener('click', () => showScene('final'));
+
+  // ---- Scene 3: crying cat, "Please think about it again..." ----
+  // No here leads into the swap-chase scene; Yes goes straight to the happy ending.
+  const no3 = document.getElementById('no3');
+  const yes3 = document.getElementById('yes3');
+  no3.addEventListener('click', () => showScene('scene4'));
+  yes3.addEventListener('click', () => showScene('final'));
+
+  // ---- Scene 4: buttons swap places every time "No" is tried; keeps switching forever ----
+  const no4 = document.getElementById('no4');
+  const yes4 = document.getElementById('yes4');
+  const cat4 = document.getElementById('cat4');
+  const scene4Title = document.getElementById('scene4-title');
+  let hasSwappedOnce = false;
+
+  setupSwapButtons(no4, yes4, true);
+  no4.addEventListener('click', () => {
+    if(!hasSwappedOnce){
+      hasSwappedOnce = true;
+      cat4.src = 'catt6.png';
+      scene4Title.textContent = "You really can't say no to raising a cat with me! 💕";
+    }
+  });
+  yes4.addEventListener('click', () => showScene('final'));
+</script>
+
+</body>
+</html>
